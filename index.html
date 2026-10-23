@@ -3,302 +3,314 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Альбом</title>
+<title>Книга для тебя</title>
 <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
   body {
-    background-color: #0d0709;
-    background-image: radial-gradient(circle at center, #2a151c 0%, #0d0709 100%);
-    color: #333;
+    background-color: #1a0f14;
+    background-image: radial-gradient(circle at center, #3a1c2a 0%, #0d0709 100%);
     font-family: 'Cormorant Garamond', serif;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    overflow: hidden; /* Скрываем лишнее для эффекта книги */
+    overflow: hidden;
   }
 
-  /* Обложка альбома */
+  .floating-hearts {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .heart-bg {
+    position: absolute; bottom: -50px; color: rgba(255, 123, 156, 0.15);
+    animation: floatUp 12s linear infinite;
+  }
+  .heart-bg:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; font-size: 2rem; }
+  .heart-bg:nth-child(2) { left: 30%; animation-duration: 14s; animation-delay: 2s; font-size: 1.5rem; }
+  .heart-bg:nth-child(3) { left: 55%; animation-duration: 10s; animation-delay: 4s; font-size: 2.5rem; }
+  .heart-bg:nth-child(4) { left: 75%; animation-duration: 12s; animation-delay: 1s; font-size: 1.8rem; }
+  .heart-bg:nth-child(5) { left: 90%; animation-duration: 11s; animation-delay: 5s; font-size: 2rem; }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+
   #cover {
+    position: absolute;
     cursor: pointer;
-    position: relative;
-    width: 300px;
-    height: 400px;
-    background: #3a1c2a;
+    width: 320px;
+    height: 460px;
+    background: #4a1c2a;
     background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');
-    border-radius: 8px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 50px rgba(0,0,0,0.8);
+    border-radius: 8px 16px 16px 8px;
+    box-shadow: 20px 20px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.6);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: transform 0.5s ease, opacity 0.5s ease;
-    z-index: 10;
-    border: 2px solid #5a4b43;
+    transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+    z-index: 20;
+    border-left: 12px solid #2a0d14;
   }
-  #cover:hover { transform: scale(1.03) translateY(-5px); }
-  #cover.hide { opacity: 0; transform: scale(0.8) translateY(-50px); pointer-events: none; position: absolute; }
+  #cover:hover { transform: scale(1.02); }
+  #cover.hide { transform: translateX(-150%) rotateY(-30deg); opacity: 0; pointer-events: none; }
   
   #cover h1 {
     font-family: 'Marck Script', cursive;
-    color: #d4af37; /* Золотой цвет */
-    font-size: 3rem;
+    color: #f7c8d8;
+    font-size: 2.8rem;
     text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 1.2;
   }
   .cover-heart {
-    font-size: 3rem;
-    color: #b3244b;
+    font-size: 4rem;
+    color: #e91e63;
     animation: beat 1.5s infinite;
-    filter: drop-shadow(0 5px 15px rgba(179,36,75,0.6));
+    filter: drop-shadow(0 5px 20px rgba(233,30,99,0.8));
   }
 
-  /* Книга */
-  #album {
-    display: none;
+  #book {
     position: relative;
-    width: 100%;
-    max-width: 450px;
-    height: 80vh;
-    max-height: 600px;
+    display: none;
+    width: 90vw;
+    max-width: 800px;
+    height: 85vh;
+    max-height: 550px;
     opacity: 0;
-    transition: opacity 1s ease;
-    perspective: 1500px;
+    transition: opacity 0.8s ease;
+    z-index: 10;
   }
-  #album.show { display: block; opacity: 1; }
+  #book.show { display: flex; opacity: 1; }
+
+  .book-spread {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+    border-radius: 8px;
+    position: relative;
+    background-color: #f7e6eb;
+  }
 
   .page {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: #f2eadc;
+    width: 50%;
+    height: 100%;
+    background-color: #f7e6eb;
     background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
-    border-radius: 4px;
-    box-shadow: inset 4px 0 10px rgba(0,0,0,0.05), 5px 5px 25px rgba(0,0,0,0.6);
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    transform-origin: left center;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
-    backface-visibility: hidden;
+    justify-content: center;
+    text-align: center;
+    position: relative;
   }
 
-  /* Скрываем все страницы кроме активной */
-  .page.hidden { opacity: 0; pointer-events: none; transform: rotateY(-30deg); }
-  .page.active { opacity: 1; pointer-events: auto; transform: rotateY(0deg); z-index: 5; }
+  .page.left {
+    border-radius: 8px 0 0 8px;
+    border-right: 1px solid #e5cdd4;
+  }
+  .page.right {
+    border-radius: 0 8px 8px 0;
+  }
 
-  /* Текст на странице */
+  .fade-out { opacity: 0; transform: scale(0.95); }
+  .fade-in { opacity: 1; transform: scale(1); }
+
   .page-text {
     font-family: 'Marck Script', cursive;
-    font-size: 1.6rem;
-    color: #3b2b2e;
-    text-align: center;
+    font-size: 1.5rem;
+    color: #5a2a36;
     line-height: 1.4;
     margin-bottom: 20px;
-    position: relative;
-  }
-  .page-text::after {
-    content: '❤️';
-    display: block;
-    font-size: 1.2rem;
-    margin-top: 10px;
-    color: #e91e63;
-    animation: beat 1.5s infinite;
   }
 
-  /* Рамка для фото */
+  .poem-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #5a2a36;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    text-align: left;
+    padding-left: 10px;
+  }
+
   .photo-frame {
     background: #fff;
-    padding: 10px 10px 40px 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    padding: 8px 8px 30px 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
     transform: rotate(-2deg);
-    width: 90%;
-    max-width: 280px;
-    position: relative;
+    width: 85%;
+    max-width: 220px;
   }
   .photo-frame img {
     width: 100%;
     height: auto;
-    max-height: 220px;
+    max-height: 180px;
     object-fit: cover;
     display: block;
-    border-radius: 2px;
-    filter: contrast(1.05) sepia(0.1);
+    filter: sepia(0.1) contrast(0.95);
   }
 
-  /* Кнопки навигации */
+  .big-heart {
+    font-size: 3rem;
+    color: #e91e63;
+    animation: beat 1.5s infinite;
+    filter: drop-shadow(0 5px 15px rgba(233,30,99,0.3));
+  }
+
   .nav-buttons {
     position: absolute;
-    bottom: 20px;
+    bottom: -60px;
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 0 15px;
     z-index: 20;
   }
   .nav-btn {
-    background: rgba(58, 28, 42, 0.8);
-    color: #d4af37;
-    border: 1px solid #d4af37;
-    padding: 8px 20px;
-    border-radius: 20px;
+    background: rgba(74, 28, 42, 0.9);
+    color: #f7c8d8;
+    border: 1px solid #f7c8d8;
+    padding: 10px 25px;
+    border-radius: 30px;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
   }
-  .nav-btn:hover { background: #3a1c2a; color: #fff; }
-  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-  /* Индикатор страниц */
-  .page-indicator {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 0.9rem;
-    color: #888;
-    font-family: 'Cormorant Garamond', serif;
-  }
+  .nav-btn:hover { background: #7a132e; color: #fff; transform: translateY(-2px); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
   @keyframes beat {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.15); }
   }
 
-  /* Финал */
-  .final-text {
-    font-family: 'Marck Script', cursive;
-    font-size: 1.8rem;
-    color: #b3244b;
-    text-align: center;
-    margin-top: 20px;
-    line-height: 1.5;
+  @media (max-width: 700px) {
+    #book { max-width: 350px; height: 80vh; }
+    .book-spread { flex-direction: column; }
+    .page { width: 100%; height: 50%; padding: 15px; }
+    .page.left { border-radius: 8px 8px 0 0; border-bottom: 1px solid #e5cdd4; border-right: none; }
+    .page.right { border-radius: 0 0 8px 8px; }
+    .photo-frame { max-width: 150px; max-height: 120px; }
+    .poem-text { font-size: 1rem; padding-left: 0; text-align: center; }
   }
-
-  /* Световой эффект (блик) */
-  .light-effect {
-    position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-    background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 60%);
-    pointer-events: none; z-index: 1;
-    animation: rotateLight 20s linear infinite;
-  }
-  @keyframes rotateLight {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
 </style>
 </head>
 <body>
 
-  <div class="light-effect"></div>
+  <div class="floating-hearts">
+    <div class="heart-bg">❤️</div>
+    <div class="heart-bg">💖</div>
+    <div class="heart-bg">💕</div>
+    <div class="heart-bg">💘</div>
+    <div class="heart-bg">🌸</div>
+  </div>
 
-  <!-- Обложка -->
-  <div id="cover" onclick="openAlbum()">
-    <h1>Для тебя</h1>
+  <div id="cover" onclick="openBook()">
+    <h1>Моей<br>любимой</h1>
     <div class="cover-heart">❤️</div>
   </div>
 
-  <!-- Альбом -->
-  <div id="album">
+  <div id="book">
+    <div class="book-spread">
+      <div class="page left" id="pageLeft"></div>
+      <div class="page right" id="pageRight"></div>
+    </div>
     
-    <!-- Страница 1 -->
-    <div class="page active" id="page1">
-      <div class="page-indicator">1 / 6</div>
-      <div class="page-text">Больше всего на свете я люблю тебя...</div>
-      <div class="photo-frame">
-        <img src="1.jpg" alt="Фото 1">
-      </div>
-    </div>
-
-    <!-- Страница 2 -->
-    <div class="page hidden" id="page2">
-      <div class="page-indicator">2 / 6</div>
-      <div class="page-text">Если бы не твое доброе утро, мне и вставать не захотелось бы...</div>
-      <div class="photo-frame">
-        <img src="2.jpg" alt="Фото 2">
-      </div>
-    </div>
-
-    <!-- Страница 3 -->
-    <div class="page hidden" id="page3">
-      <div class="page-indicator">3 / 6</div>
-      <div class="page-text">Если бы не твоя любовь, и жить бы не хотелось...</div>
-      <div class="photo-frame">
-        <img src="3.jpg" alt="Фото 3">
-      </div>
-    </div>
-
-    <!-- Страница 4 -->
-    <div class="page hidden" id="page4">
-      <div class="page-indicator">4 / 6</div>
-      <div class="page-text">Если бы не твой смех, я бы не чувствовал, что люблю жить...</div>
-      <div class="photo-frame">
-        <img src="4.jpg" alt="Фото 4">
-      </div>
-    </div>
-
-    <!-- Страница 5 -->
-    <div class="page hidden" id="page5">
-      <div class="page-indicator">5 / 6</div>
-      <div class="page-text">Я тебя так сильно люблю, любимая. Так сильно, что и передать не могу. Не получается...</div>
-      <div class="photo-frame">
-        <img src="5.jpg" alt="Фото 5">
-      </div>
-    </div>
-
-    <!-- Страница 6 (Финал) -->
-    <div class="page hidden" id="page6">
-      <div class="page-indicator">6 / 6</div>
-      <div class="final-text">Твоя красота меня так манит... чувство, что я утопаю в слезах радости. И губы болят от улыбки.<br><br>Спасибо, что ты есть. Ты — мое самое большое счастье. ❤️</div>
-      <div class="photo-frame" style="margin-top: 15px;">
-        <img src="6.jpg" alt="Фото 6">
-      </div>
-    </div>
-
-    <!-- Кнопки -->
     <div class="nav-buttons">
       <button class="nav-btn" id="prevBtn" onclick="changePage(-1)" disabled>Назад</button>
       <button class="nav-btn" id="nextBtn" onclick="changePage(1)">Далее</button>
     </div>
-
   </div>
 
 <script>
-  let currentPage = 1;
-  const totalPages = 6;
+  const pagesData = [
+    { left: "Больше всего на свете я люблю тебя.", right: "<div class='photo-frame'><img src='1.jpg' alt='Фото'></div>", heart: "❤️" },
+    { left: "Если бы не твое доброе утро, мне и вставать не захотелось бы.", right: "<div class='photo-frame'><img src='2.jpg' alt='Фото'></div>", heart: "💖" },
+    { left: "Если бы не твоя любовь, и жить бы не хотелось.", right: "<div class='photo-frame'><img src='3.jpg' alt='Фото'></div>", heart: "💕" },
+    { left: "Если бы не твой смех, я бы не чувствовал, что люблю жить.", right: "<div class='photo-frame'><img src='4.jpg' alt='Фото'></div>", heart: "💘" },
+    { left: "Я тебя так сильно люблю, любимая. Так сильно, что и передать не могу.", right: "<div class='photo-frame'><img src='5.jpg' alt='Фото'></div>", heart: "❤️" },
+    { left: "Ты — мой самый родной человек.", right: "<div class='big-heart'>💖</div>", heart: "💖" },
+    { left: "Твоя красота меня так манит... Чувство, что я утопаю в слезах радости.", right: "<div class='photo-frame'><img src='6.jpg' alt='Фото'></div>", heart: "✨" },
+    { left: "Спасибо тебе за каждый день. За твое тепло.", right: "<div class='big-heart'>❤️</div>", heart: "❤️" },
+    { left: "Ты — самое лучшее, что случилось в моей жизни.", right: "<div class='big-heart'>💕</div>", heart: "💕" },
+    { left: "Ты — мое самое большое счастье. Я люблю тебя.", right: "<div class='big-heart'>💘</div>", heart: "💘" },
+    // 11-я: Стих
+    { 
+      left: "<div class='poem-text'>В твоих глазах я нахожу рассвет,<br>В твоей улыбке — теплое дыханье.<br>Тебя роднее в этом мире нет,<br>Ты — мое самое заветное желанье.</div>", 
+      right: "<div class='poem-text'>Я по крупицам собирал мечты,<br>Чтоб подарить тебе свою вселенную.<br>И если рядом, в этой жизни, ты —<br>То я нашел дорогу драгоценную.<br><br>Пусть за окном бушуют холода,<br>Пусть время мчится, не сбавляя шаг.<br>Ты будешь мною любима всегда,<br>Ведь без тебя я просто не могу никак.</div>", 
+      heart: "💖" 
+    },
+    // 12-я: Финал с фото (7.jpg)
+    { 
+      left: "Я хочу, чтобы мы вместе работали над нашим счастьем. Каждый день. Всю жизнь.", 
+      right: "<div class='photo-frame'><img src='7.jpg' alt='Фото'></div>", 
+      heart: "❤️" 
+    }
+  ];
 
-  function openAlbum() {
+  let currentPage = 0;
+  const totalPages = pagesData.length;
+  const pageLeft = document.getElementById('pageLeft');
+  const pageRight = document.getElementById('pageRight');
+
+  function openBook() {
     document.getElementById('cover').classList.add('hide');
     setTimeout(() => {
-      document.getElementById('album').classList.add('show');
-    }, 300);
+      document.getElementById('book').classList.add('show');
+      renderPage(true);
+    }, 400);
+  }
+
+  function renderPage(instant = false) {
+    const data = pagesData[currentPage];
+    
+    if (instant) {
+      pageLeft.innerHTML = `<div class="page-text">${data.left}</div><div class="big-heart">${data.heart}</div>`;
+      pageRight.innerHTML = data.right;
+    } else {
+      pageLeft.classList.add('fade-out');
+      pageRight.classList.add('fade-out');
+      
+      setTimeout(() => {
+        pageLeft.innerHTML = `<div class="page-text">${data.left}</div><div class="big-heart">${data.heart}</div>`;
+        pageRight.innerHTML = data.right;
+        
+        pageLeft.classList.remove('fade-out');
+        pageRight.classList.remove('fade-out');
+        pageLeft.classList.add('fade-in');
+        pageRight.classList.add('fade-in');
+      }, 300);
+    }
+
+    document.getElementById('prevBtn').disabled = currentPage === 0;
+    document.getElementById('nextBtn').disabled = currentPage === totalPages - 1;
   }
 
   function changePage(direction) {
-    if (currentPage + direction < 1 || currentPage + direction > totalPages) return;
+    if (currentPage + direction < 0 || currentPage + direction >= totalPages) return;
 
-    // Скрываем текущую страницу
-    const currentEl = document.getElementById('page' + currentPage);
-    currentEl.classList.remove('active');
-    currentEl.classList.add('hidden');
+    const spread = document.querySelector('.book-spread');
+    spread.style.transform = direction === 1 ? 'rotateY(-5deg)' : 'rotateY(5deg)';
+    spread.style.transition = 'transform 0.3s ease';
+    
+    setTimeout(() => {
+      spread.style.transform = 'rotateY(0deg)';
+    }, 300);
 
-    // Меняем номер
     currentPage += direction;
-
-    // Показываем новую
-    const nextEl = document.getElementById('page' + currentPage);
-    nextEl.classList.remove('hidden');
-    nextEl.classList.add('active');
-
-    // Обновляем кнопки
-    document.getElementById('prevBtn').disabled = currentPage === 1;
-    document.getElementById('nextBtn').disabled = currentPage === totalPages;
+    renderPage();
   }
 </script>
 </body>
