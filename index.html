@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -17,7 +18,6 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    /* Убираем прокрутку и фиксируем экран */
     height: 100vh;
     width: 100vw;
   }
@@ -43,7 +43,6 @@
     100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
   }
 
-  /* Обложка */
   #cover {
     position: absolute;
     cursor: pointer;
@@ -80,13 +79,12 @@
     filter: drop-shadow(0 5px 20px rgba(233,30,99,0.8));
   }
 
-  /* Сцена книги */
   #book {
     position: relative;
     display: none;
     width: 90vw;
     max-width: 800px;
-    height: 75vh; /* Уменьшили высоту для мобильных */
+    height: 75vh;
     max-height: 500px;
     opacity: 0;
     transition: opacity 0.8s ease;
@@ -94,7 +92,6 @@
   }
   #book.show { display: flex; opacity: 1; }
 
-  /* Разворот книги */
   .book-spread {
     display: flex;
     width: 100%;
@@ -117,7 +114,7 @@
     justify-content: center;
     text-align: center;
     position: relative;
-    overflow: hidden; /* Чтобы текст не вылезал */
+    overflow: hidden;
   }
 
   .page.left {
@@ -131,7 +128,6 @@
   .fade-out { opacity: 0; transform: scale(0.95); }
   .fade-in { opacity: 1; transform: scale(1); }
 
-  /* Текст */
   .page-text {
     font-family: 'Marck Script', cursive;
     font-size: 1.4rem;
@@ -141,7 +137,6 @@
     word-wrap: break-word;
   }
 
-  /* Стиль для стиха */
   .poem-text {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
@@ -152,7 +147,6 @@
     text-align: left;
   }
 
-  /* Фото */
   .photo-frame {
     background: #fff;
     padding: 6px 6px 25px 6px;
@@ -177,7 +171,6 @@
     filter: drop-shadow(0 5px 15px rgba(233,30,99,0.3));
   }
 
-  /* Кнопки */
   .nav-buttons {
     position: absolute;
     bottom: -50px;
@@ -207,51 +200,18 @@
     50% { transform: scale(1.15); }
   }
 
-  /* --- МОБИЛЬНАЯ АДАПТАЦИЯ (САМОЕ ВАЖНОЕ) --- */
   @media (max-width: 700px) {
     #cover { width: 85vw; height: 60vh; }
     #cover h1 { font-size: 2.2rem; }
-    
-    #book { 
-      width: 95vw; 
-      height: 70vh; /* Фиксируем высоту, чтобы влезло */
-      max-height: 70vh;
-    }
-    
-    .book-spread { 
-      flex-direction: column; 
-    }
-    
-    .page { 
-      width: 100%; 
-      height: 50%; 
-      padding: 10px; 
-    }
-    
-    .page.left { 
-      border-radius: 8px 8px 0 0; 
-      border-bottom: 1px solid #e5cdd4; 
-      border-right: none; 
-      justify-content: flex-end; /* Текст прижимаем вниз */
-      padding-bottom: 15px;
-    }
-    
-    .page.right { 
-      border-radius: 0 0 8px 8px; 
-      justify-content: flex-start; /* Фото прижимаем вверх */
-      padding-top: 15px;
-    }
-    
+    #book { width: 95vw; height: 70vh; max-height: 70vh; }
+    .book-spread { flex-direction: column; }
+    .page { width: 100%; height: 50%; padding: 10px; }
+    .page.left { border-radius: 8px 8px 0 0; border-bottom: 1px solid #e5cdd4; border-right: none; justify-content: flex-end; padding-bottom: 15px; }
+    .page.right { border-radius: 0 0 8px 8px; justify-content: flex-start; padding-top: 15px; }
     .page-text { font-size: 1.2rem; margin-bottom: 5px; }
     .poem-text { font-size: 0.9rem; text-align: center; }
     .big-heart { font-size: 2rem; }
-    
-    .photo-frame { 
-      max-width: 130px; 
-      max-height: 110px; 
-      padding: 4px 4px 15px 4px;
-    }
-    
+    .photo-frame { max-width: 130px; max-height: 110px; padding: 4px 4px 15px 4px; }
     .nav-buttons { bottom: -45px; }
     .nav-btn { padding: 8px 18px; font-size: 0.95rem; }
   }
@@ -301,7 +261,9 @@
       right: "<div class='poem-text'>Я по крупицам собирал мечты,<br>Чтоб подарить тебе свою вселенную.<br>И если рядом, в этой жизни, ты —<br>То я нашел дорогу драгоценную.<br><br>Пусть за окном бушуют холода,<br>Пусть время мчится, не сбавляя шаг.<br>Ты будешь мною любима всегда,<br>Ведь без тебя я просто не могу никак.</div>", 
       heart: "💖" 
     },
-    { left: "Я хочу, чтобы мы вместе работали над нашим счастьем. Каждый день. Всю жизнь.", right: "<div class='photo-frame'><img src='7.jpg' alt='Фото'></div>", heart: "❤️" }
+    { left: "Я хочу, чтобы мы вместе работали над нашим счастьем. Каждый день. Всю жизнь.", right: "<div class='photo-frame'><img src='7.jpg' alt='Фото'></div>", heart: "❤️" },
+    // НОВАЯ 13-я СТРАНИЦА
+    { left: "Я искренне боюсь потерять тебя. Я тебя так сильно люблю.", right: "<div class='big-heart'>❤️</div>", heart: "❤️" }
   ];
 
   let currentPage = 0;
@@ -358,4 +320,4 @@
   }
 </script>
 </body>
-</html>
+</html>  
